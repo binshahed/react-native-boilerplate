@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 214 79% 22%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 63%;
+    --radius: 0.625rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    
+    /* Brand Colors */
+    --brand-primary: #0C3265;
+    --brand-secondary: #2F80ED;
+    
+    /* State Colors */
+    --state-info: #2F80ED;
+    --state-success: #27AE60;
+    --state-warning: #E2B93B;
+    --state-error: #EB5757;
+    --state-orange: #F29921;
+    
+    /* Black & White */
+    --black-1: #000000;
+    --black-2: #1D1D1D;
+    --black-3: #282828;
+    --white: #FFFFFF;
+    
+    /* Grey Scale */
+    --gray-1: #333333;
+    --gray-2: #4F4F4F;
+    --gray-3: #828282;
+    --gray-4: #A4ABB4;
+    --gray-5: #BDBDBD;
+    --gray-6: #E0E0E0;
+    
+    /* Blue Colors */
+    --blue-light: #e7ebf0;
+    --blue-light-hover: #dbe0e8;
+    --blue-light-active: #b4bfcf;
+    --blue-normal: #0c3265;
+    --blue-normal-hover: #0b2d5b;
+    --blue-normal-active: #0a2851;
+    --blue-dark: #09264c;
+    --blue-dark-hover: #071e3d;
+    --blue-dark-active: #05162d;
+    --blue-darker: #041223;
+  }
+
+  .dark:root {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 214 79% 22%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 70.9% 59.4%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 300 0% 45%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    
+    /* Brand Colors (same in dark mode) */
+    --brand-primary: #0C3265;
+    --brand-secondary: #2F80ED;
+    
+    /* State Colors (same in dark mode) */
+    --state-info: #2F80ED;
+    --state-success: #27AE60;
+    --state-warning: #E2B93B;
+    --state-error: #EB5757;
+    --state-orange: #F29921;
+    
+    /* Black & White (same in dark mode) */
+    --black-1: #000000;
+    --black-2: #1D1D1D;
+    --black-3: #282828;
+    --white: #FFFFFF;
+    
+    /* Grey Scale (same in dark mode) */
+    --gray-1: #333333;
+    --gray-2: #4F4F4F;
+    --gray-3: #828282;
+    --gray-4: #A4ABB4;
+    --gray-5: #BDBDBD;
+    --gray-6: #E0E0E0;
+    
+    /* Blue Colors (same in dark mode) */
+    --blue-light: #e7ebf0;
+    --blue-light-hover: #dbe0e8;
+    --blue-light-active: #b4bfcf;
+    --blue-normal: #0c3265;
+    --blue-normal-hover: #0b2d5b;
+    --blue-normal-active: #0a2851;
+    --blue-dark: #09264c;
+    --blue-dark-hover: #071e3d;
+    --blue-dark-active: #05162d;
+    --blue-darker: #041223;
+  }
+}
