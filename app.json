@@ -17,14 +17,13 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.boilerplate.boilerplate",
-      "googleServicesFile": "./GoogleService-Info.plist",
+
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
       "edgeToEdgeEnabled": true,
-      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -58,9 +57,7 @@
             "resizeMode": "contain"
           }
         }
-      ],
-
-      "expo-localization"
+      ]
     ],
     "experiments": {
       "typedRoutes": true

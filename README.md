@@ -130,10 +130,7 @@ Browse all available components at [reactnativereusables.com](https://reactnativ
 
 Create a `.env` file in the root directory for environment-specific configurations.
 
-### Firebase Setup
 
-- **iOS**: Place `GoogleService-Info.plist` in the root directory
-- **Android**: Place `google-services.json` in the root directory
 
 ## Features
 
