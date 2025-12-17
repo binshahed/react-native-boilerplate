@@ -122,7 +122,7 @@ npx shadcn@latest add https://reactnativereusables.com/r/new-york/button.json
 npx shadcn@latest add https://reactnativereusables.com/r/new-york/textarea.json
 ```
 
-Browse all available components at [reactnativereusables.com](https://reactnativereusables.com/r/new-york).
+Browse all available components at [reactnativereusables.com](https://reactnativereusables.com/).
 
 ## Configuration
 
