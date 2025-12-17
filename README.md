@@ -71,3 +71,29 @@ The easiest way to deploy your app is with [Expo Application Services (EAS)](htt
 ---
 
 If you enjoy using React Native Reusables, please consider giving it a ⭐ on [GitHub](https://github.com/founded-labs/react-native-reusables). Your support means a lot!
+
+
+## Adding React Native Reusable Components
+
+You can easily add reusable components to your project using the shadcn CLI and the public component registry at [reactnativereusables.com](https://reactnativereusables.com).
+
+To add a specific component (for example, `input`), run:
+
+```bash
+npx shadcn@latest add https://reactnativereusables.com/r/new-york/input.json
+```
+
+To add a different component, replace `input` with the component name you want. For example, to add a `button` component:
+
+```bash
+npx shadcn@latest add https://reactnativereusables.com/r/new-york/button.json
+```
+
+Alternatively, use the template below to add any component by replacing `{{component}}` with your chosen component name:
+
+```bash
+npx shadcn@latest add https://reactnativereusables.com/r/new-york/{{component}}.json
+```
+
+Refer to [the official component list](https://reactnativereusables.com/r/new-york) to explore all available components.
+
