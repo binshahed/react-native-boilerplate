@@ -1,99 +1,169 @@
-# Minimal Template
+# Reward App
 
-This is a [React Native](https://reactnative.dev/) project built with [Expo](https://expo.dev/) and [React Native Reusables](https://reactnativereusables.com).
+A React Native mobile application built with Expo, featuring a modern UI with React Native Reusables and state management with Redux Toolkit.
 
-It was initialized using the following command:
+## Tech Stack
 
-```bash
-npx @react-native-reusables/cli@latest init -t Boilerplate
+- **Framework**: [React Native](https://reactnative.dev/) with [Expo](https://expo.dev/)
+- **Routing**: [Expo Router](https://expo.dev/router) with typed routes
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) via [NativeWind](https://www.nativewind.dev/)
+- **UI Components**: [React Native Reusables](https://reactnativereusables.com)
+- **State Management**: [Redux Toolkit](https://redux-toolkit.js.org/) with RTK Query
+- **Architecture**: New Architecture enabled, Edge-to-Edge support
+
+## Project Structure
+
+```
+├── app/                    # Expo Router screens
+│   ├── (private)/          # Authenticated routes
+│   │   ├── (tabs)/         # Tab navigation screens
+│   │   └── users/          # User-related screens
+│   ├── (public)/           # Public routes (login, etc.)
+│   └── _layout.tsx         # Root layout
+├── components/             # Reusable UI components
+│   ├── modals/             # Modal components
+│   ├── navigation/         # Navigation components
+│   └── ui/                 # Base UI components
+├── constants/              # App constants and configs
+├── enums/                  # TypeScript enums
+├── features/               # Feature modules
+├── hooks/                  # Custom React hooks
+├── layouts/                # Layout components
+├── lib/                    # Utility libraries
+├── services/               # API services
+├── store/                  # Redux store
+│   └── features/           # Redux slices
+│       ├── api/            # RTK Query API
+│       ├── auth/           # Authentication slice
+│       ├── counter/        # Counter slice (example)
+│       └── network/        # Network status slice
+├── types/                  # TypeScript types
+└── utils/                  # Utility functions
 ```
 
 ## Getting Started
 
-To run the development server:
+### Prerequisites
+
+- Node.js (v18 or higher)
+- Yarn, npm, pnpm, or bun
+- Expo CLI
+- iOS Simulator (Mac only) or Android Emulator
+
+### Installation
 
 ```bash
-    npm run dev
-    # or
-    yarn dev
-    # or
-    pnpm dev
-    # or
-    bun dev
+# Clone the repository
+git clone <repository-url>
+cd Reward
+
+# Install dependencies
+yarn install
+# or
+npm install
 ```
 
-This will start the Expo Dev Server. Open the app in:
-
-- **iOS**: press `i` to launch in the iOS simulator _(Mac only)_
-- **Android**: press `a` to launch in the Android emulator
-- **Web**: press `w` to run in a browser
-
-You can also scan the QR code using the [Expo Go](https://expo.dev/go) app on your device. This project fully supports running in Expo Go for quick testing on physical devices.
-
-## Adding components
-
-You can add more reusable components using the CLI:
+### Running the App
 
 ```bash
-npx react-native-reusables/cli@latest add [...components]
+# Start the development server
+yarn dev
+# or
+npm run dev
 ```
 
-> e.g. `npx react-native-reusables/cli@latest add input textarea`
+Once started:
+- Press `i` to launch on iOS Simulator (Mac only)
+- Press `a` to launch on Android Emulator
+- Press `w` to run in web browser
+- Scan QR code with [Expo Go](https://expo.dev/go) app for physical device testing
 
-If you don't specify any component names, you'll be prompted to select which components to add interactively. Use the `--all` flag to install all available components at once.
+## Building for Production
 
-## Project Features
+### Using Build Scripts
 
-- ⚛️ Built with [Expo Router](https://expo.dev/router)
-- 🎨 Styled with [Tailwind CSS](https://tailwindcss.com/) via [Nativewind](https://www.nativewind.dev/)
-- 📦 UI powered by [React Native Reusables](https://github.com/founded-labs/react-native-reusables)
-- 🚀 New Architecture enabled
-- 🔥 Edge to Edge enabled
-- 📱 Runs on iOS, Android, and Web
+```bash
+# Debug build
+./build-script/common-build-debug.sh
+
+# Production build
+./build-script/common-build.sh
+
+# Force clean and rebuild (debug)
+./build-script/force-build-and-clean-debug.sh
+
+# Force clean and rebuild (production)
+./build-script/force-build-and-clean.sh
+```
+
+### Using EAS Build
+
+```bash
+# Build for iOS
+eas build --platform ios
+
+# Build for Android
+eas build --platform android
+
+# Build for both platforms
+eas build --platform all
+```
+
+## Adding UI Components
+
+Add components from React Native Reusables:
+
+```bash
+# Add a specific component
+npx shadcn@latest add https://reactnativereusables.com/r/new-york/input.json
+
+# Add multiple components
+npx shadcn@latest add https://reactnativereusables.com/r/new-york/button.json
+npx shadcn@latest add https://reactnativereusables.com/r/new-york/textarea.json
+```
+
+Browse all available components at [reactnativereusables.com](https://reactnativereusables.com/r/new-york).
+
+## Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory for environment-specific configurations.
+
+### Firebase Setup
+
+- **iOS**: Place `GoogleService-Info.plist` in the root directory
+- **Android**: Place `google-services.json` in the root directory
+
+## Features
+
+- 🔐 **Authentication**: Login/logout with Redux state management
+- 📱 **Tab Navigation**: Dashboard, Menu, and Submission tabs
+- 🎨 **Theme Support**: Light/dark mode with persistence
+- 🌐 **Network Handling**: Network status monitoring with error modals
+- 🚀 **New Architecture**: Enabled for better performance
+- 🔥 **Edge-to-Edge**: Full-screen experience on Android
 
 ## Learn More
 
-To dive deeper into the technologies used:
-
 - [React Native Docs](https://reactnative.dev/docs/getting-started)
 - [Expo Docs](https://docs.expo.dev/)
-- [Nativewind Docs](https://www.nativewind.dev/)
+- [NativeWind Docs](https://www.nativewind.dev/)
+- [Redux Toolkit Docs](https://redux-toolkit.js.org/)
 - [React Native Reusables](https://reactnativereusables.com)
 
-## Deploy with EAS
+## Deployment
 
-The easiest way to deploy your app is with [Expo Application Services (EAS)](https://expo.dev/eas).
+Deploy with [Expo Application Services (EAS)](https://expo.dev/eas):
 
-- [EAS Build](https://docs.expo.dev/build/introduction/)
-- [EAS Updates](https://docs.expo.dev/eas-update/introduction/)
-- [EAS Submit](https://docs.expo.dev/submit/introduction/)
+- [EAS Build](https://docs.expo.dev/build/introduction/) - Build native apps
+- [EAS Updates](https://docs.expo.dev/eas-update/introduction/) - Over-the-air updates
+- [EAS Submit](https://docs.expo.dev/submit/introduction/) - App store submission
 
----
+## Author
 
-If you enjoy using React Native Reusables, please consider giving it a ⭐ on [GitHub](https://github.com/founded-labs/react-native-reusables). Your support means a lot!
+Created by **Mohammad Bin Shahed**
 
+## License
 
-## Adding React Native Reusable Components
-
-You can easily add reusable components to your project using the shadcn CLI and the public component registry at [reactnativereusables.com](https://reactnativereusables.com).
-
-To add a specific component (for example, `input`), run:
-
-```bash
-npx shadcn@latest add https://reactnativereusables.com/r/new-york/input.json
-```
-
-To add a different component, replace `input` with the component name you want. For example, to add a `button` component:
-
-```bash
-npx shadcn@latest add https://reactnativereusables.com/r/new-york/button.json
-```
-
-Alternatively, use the template below to add any component by replacing `{{component}}` with your chosen component name:
-
-```bash
-npx shadcn@latest add https://reactnativereusables.com/r/new-york/{{component}}.json
-```
-
-Refer to [the official component list](https://reactnativereusables.com/r/new-york) to explore all available components.
-
+This project is proprietary software.
