@@ -1,4 +1,4 @@
-# Reward App
+# Boilerplate App
 
 A React Native mobile application built with Expo, featuring a modern UI with React Native Reusables and state management with Redux Toolkit.
 
@@ -55,7 +55,7 @@ A React Native mobile application built with Expo, featuring a modern UI with Re
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd Reward
+cd react-native-boilerplate
 
 # Install dependencies
 yarn install
