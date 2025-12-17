@@ -164,6 +164,3 @@ Deploy with [Expo Application Services (EAS)](https://expo.dev/eas):
 
 Created by **Mohammad Bin Shahed**
 
-## License
-
-This project is proprietary software.
