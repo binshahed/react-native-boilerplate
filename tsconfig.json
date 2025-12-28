@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["*"]
-    }
+    },
+    "lib": ["ES2015", "ES2017", "ES2018", "ES2019", "ES2020", "ES2021", "ES2022", "DOM"]
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts", "nativewind-env.d.ts"]
 }

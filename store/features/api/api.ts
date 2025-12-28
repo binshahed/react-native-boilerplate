@@ -1,42 +1,56 @@
-import {
-  BaseQueryFn,
-  createApi,
-  FetchArgs,
-  fetchBaseQuery,
-  FetchBaseQueryError,
-} from '@reduxjs/toolkit/query/react';
-import { logout, setAccessToken, setRefreshToken } from '../auth/auth.slice';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ASYNC_STORAGE_CODE } from '@/constants/AsyncStorageCode';
-
-import { updateNetworkConnected } from '../network/network.slice';
-
-const baseUrl = 'https://api.boilerplate.com';
+import { logout, setTokens } from '@/store/features/auth/auth.slice';
+import type { LoginResponse } from '@/store/features/auth/auth.type';
+import type { RootState } from '@/store/store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  type BaseQueryFn,
+  createApi,
+  type FetchArgs,
+  fetchBaseQuery,
+  type FetchBaseQueryError,
+} from '@reduxjs/toolkit/query/react';
 
 interface TokenResponse {
   statusCode: number;
   data: {
-    token: string;
+    accessToken: string;
     refreshToken: string;
   };
   message: string;
   success: boolean;
 }
 
-const controller = new AbortController();
+const baseUrl = 'https://api.example.com';
 
+// Create base query with custom error handling
 const baseQuery = fetchBaseQuery({
-  baseUrl: '',
-  prepareHeaders: async (headers) => {
-    const token = await AsyncStorage.getItem(ASYNC_STORAGE_CODE.ACCESS_TOKEN_KEY);
+  baseUrl: baseUrl,
+  prepareHeaders: async (headers, { getState }) => {
+    // Prefer token from Redux, fall back to AsyncStorage for initial load
+    const state = getState() as RootState;
+    let token = state.auth.accessToken;
+
+    if (!token) {
+      token = await AsyncStorage.getItem(ASYNC_STORAGE_CODE.ACCESS_TOKEN_KEY);
+    }
 
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
     }
+
+    headers.set('Content-Type', 'application/json');
     return headers;
   },
-  signal: controller.signal,
+});
+
+// Create base query without authentication for refresh token requests
+const baseQueryWithoutAuth = fetchBaseQuery({
+  baseUrl: baseUrl,
+  prepareHeaders: (headers) => {
+    headers.set('Content-Type', 'application/json');
+    return headers;
+  },
 });
 
 // Create wrapper for baseQuery with 401 handling
@@ -45,56 +59,70 @@ const baseQueryWithReAuth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
   api,
   extraOptions
 ) => {
-  // Get the base URL dynamically
-
-  // If args is a string, prepend baseUrl. If it's FetchArgs, modify the url property
-  const modifiedArgs: string | FetchArgs =
-    typeof args === 'string'
-      ? `${baseUrl}${args}`
-      : { ...args, url: `${baseUrl}${args.url || ''}` };
-
-  const result = await baseQuery(modifiedArgs, api, extraOptions);
-  const refreshToken = await AsyncStorage.getItem(ASYNC_STORAGE_CODE.REFRESH_TOKEN_KEY);
-
-  console.log('result from baseQueryWithReAuth', result?.error);
-
-  if (result?.data) {
-    api.dispatch(updateNetworkConnected(true));
-  }
-
-  if (result?.error?.status === 'FETCH_ERROR') {
-    console.log('Network Error from baseQueryWithReAuth', result?.error?.status);
-    api.dispatch(updateNetworkConnected(false));
-  }
+  const result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.status === 401 || (result?.error?.data as TokenResponse)?.statusCode === 401) {
-    const refreshResult = await baseQuery(
+    const refreshResult = await baseQueryWithoutAuth(
       {
-        url: `${baseUrl}/v1/auth/refresh`,
+        url: '/api/method/excel_restaurant_pos.api.auth.token.refresh',
         method: 'POST',
-        body: { refreshToken: refreshToken },
+        body: {
+          refresh_token: await AsyncStorage.getItem(ASYNC_STORAGE_CODE.REFRESH_TOKEN_KEY),
+        },
       },
       api,
       extraOptions
     );
 
-    if ((refreshResult?.data as TokenResponse)?.statusCode === 201) {
+    if (refreshResult?.data) {
       // update the token
-      AsyncStorage.setItem(
-        ASYNC_STORAGE_CODE.ACCESS_TOKEN_KEY,
-        (refreshResult?.data as TokenResponse)?.data?.token
-      );
-      api.dispatch(setAccessToken((refreshResult?.data as TokenResponse)?.data?.token));
-      AsyncStorage.setItem(
-        ASYNC_STORAGE_CODE.REFRESH_TOKEN_KEY,
-        (refreshResult?.data as TokenResponse)?.data?.token
-      );
-      api.dispatch(setRefreshToken((refreshResult?.data as TokenResponse)?.data?.token));
+      const tokenData = refreshResult.data;
 
-      return baseQuery(modifiedArgs, api, extraOptions);
+      // Handle both response structures
+      let accessToken: string | undefined;
+      let refreshToken: string | undefined;
+
+      // Check for TokenResponse structure (data.accessToken)
+      if (
+        typeof tokenData === 'object' &&
+        tokenData !== null &&
+        'data' in tokenData &&
+        typeof (tokenData as TokenResponse).data === 'object' &&
+        (tokenData as TokenResponse).data?.accessToken
+      ) {
+        const tokenResponse = tokenData as TokenResponse;
+        accessToken = tokenResponse.data.accessToken;
+        refreshToken = tokenResponse.data.refreshToken;
+      }
+      // Check for LoginResponse structure (message.data.access_token)
+      else if (
+        typeof tokenData === 'object' &&
+        tokenData !== null &&
+        'message' in tokenData &&
+        typeof (tokenData as LoginResponse).message === 'object' &&
+        (tokenData as LoginResponse).message?.data
+      ) {
+        const loginResponse = tokenData as LoginResponse;
+        accessToken = loginResponse.message.data.access_token;
+        refreshToken = loginResponse.message.data.refresh_token;
+      }
+
+      if (accessToken && refreshToken) {
+        await AsyncStorage.setItem(ASYNC_STORAGE_CODE.ACCESS_TOKEN_KEY, accessToken);
+        await AsyncStorage.setItem(ASYNC_STORAGE_CODE.REFRESH_TOKEN_KEY, refreshToken);
+
+        api.dispatch(
+          setTokens({
+            accessToken,
+            refreshToken,
+          })
+        );
+        // retry the initial request
+        return baseQuery(args, api, extraOptions);
+      } else {
+        api.dispatch(logout());
+      }
     } else {
-      AsyncStorage.removeItem(ASYNC_STORAGE_CODE.ACCESS_TOKEN_KEY);
-      AsyncStorage.removeItem(ASYNC_STORAGE_CODE.REFRESH_TOKEN_KEY);
       api.dispatch(logout());
     }
   }
@@ -107,5 +135,5 @@ export const api = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReAuth,
   endpoints: () => ({}),
-  tagTypes: ['auth', 'users'],
+  tagTypes: ['auth', 'users', 'OrderItems'],
 });

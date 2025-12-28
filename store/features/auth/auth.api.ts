@@ -1,5 +1,9 @@
+import { ASYNC_STORAGE_CODE } from '@/constants/AsyncStorageCode';
 import { api } from '../api/api';
 import { TypeUser, UpdateUserInfoPayload, Root, UpdateResponse } from '@/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { login, logout } from './auth.slice';
+import { LoginResponse } from './auth.type';
 
 export interface TypeLoginResponse {
   user: TypeUser;
@@ -11,12 +15,45 @@ export interface TypeLoginResponse {
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<Root<TypeLoginResponse>, { email: string; password: string }>({
+    login: builder.mutation<LoginResponse, { email: string; password: string }>({
       query: (data) => ({
         url: '/auth/login',
         method: 'POST',
         body: data,
       }),
+      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+
+          console.log('result', result);
+
+          const loginData = result?.data?.message?.data;
+
+          // Treat presence of access_token as success instead of relying on meta.response.status
+          if (loginData?.access_token) {
+            await AsyncStorage.setItem(ASYNC_STORAGE_CODE.ACCESS_TOKEN_KEY, loginData.access_token);
+            await AsyncStorage.setItem(
+              ASYNC_STORAGE_CODE.REFRESH_TOKEN_KEY,
+              loginData.refresh_token
+            );
+
+            // dispatch login action
+            dispatch(
+              login({
+                user: loginData?.user,
+                accessToken: loginData.access_token,
+                isAuthenticated: true,
+              })
+            );
+          } else {
+            console.log('login failed: missing token in response');
+            dispatch(logout());
+          }
+        } catch (error) {
+          console.log('error', error);
+          dispatch(logout());
+        }
+      },
       invalidatesTags: ['auth'],
     }),
     //  get me user details
