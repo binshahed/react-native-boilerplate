@@ -74,7 +74,7 @@ export const authApi = api.injectEndpoints({
         method: 'PATCH',
         body: data,
       }),
-      invalidatesTags: ['auth', 'users'],
+      invalidatesTags: ['auth', 'user'],
     }),
     //  signup user
     signup: builder.mutation<
